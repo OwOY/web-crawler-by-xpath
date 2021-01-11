@@ -5,10 +5,10 @@ import datetime
 import os
 
 
-def get_xpath(url, month):
+def get_html(url, month):
     
     requests_session = requests.Session()
-    p = requests_session.get(
+    resp = requests_session.get(
         url,
         headers = {
             'Host': 'movies.yahoo.com.tw',
@@ -26,10 +26,10 @@ def get_xpath(url, month):
             'month':month
         }
     )
-    p.encoding = 'utf8'
+    resp.encoding = 'utf8'
 
-    HTML = etree.HTML(p.text)
-    return HTML
+    html = etree.HTML(resp.text)
+    return html
 
 
 
@@ -47,19 +47,19 @@ def get_movie_info():
     print(f'{year}年電影上映資訊')
     while month < 13:
         
-        HTML = get_xpath('https://movies.yahoo.com.tw/movie_comingsoon.html', month)
+        html = get_html('https://movies.yahoo.com.tw/movie_comingsoon.html', month)
         # ---------------------------------------------------------------------------
-        Movie_Name = HTML.xpath('//div[@class="release_movie_name"]')
+        Movie_Name = html.xpath('//div[@class="release_movie_name"]')
         Movie_Name = [''.join(MN.xpath('.//a[@class="gabtn"]//text()')).replace(' ','').replace('\n','') for MN in Movie_Name]
         for MN in Movie_Name:
             Total_Movie_Name.append(MN)
         # ---------------------------------------------------------------------------
-        expect = HTML.xpath('//dl[@class="levelbox"]')
+        expect = html.xpath('//dl[@class="levelbox"]')
         expect = [''.join(ep.xpath('.//div[1]//text()|.//span//text()')) for ep in expect]
         for ep in expect:
             Total_expect.append(ep)
         # ---------------------------------------------------------------------------
-        Release_Movie_Time = HTML.xpath('//div[@class="release_movie_time"]//text()')
+        Release_Movie_Time = html.xpath('//div[@class="release_movie_time"]//text()')
         for RMT in Release_Movie_Time:
             Total_Release.append(RMT)
         # ---------------------------------------------------------------------------
@@ -73,4 +73,3 @@ def get_movie_info():
 if __name__ == '__main__':
     
     get_movie_info()
-    
