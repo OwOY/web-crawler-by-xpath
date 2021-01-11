@@ -9,7 +9,7 @@ class badmintontw:
 
     tb = pt.PrettyTable(['ID','Team','Country','Time','Location','Lv','Fee','Court','Ball'])
 
-    def get_tree(self, url):
+    def get_html(self, url):
 
         resp = self.requests.get(url,headers = 
                 {
@@ -101,7 +101,7 @@ class badmintontw:
 
     def get_team_info(self):
 
-        html = self.get_tree('https://www.badmintontw.com/taipei.php')
+        html = self.get_html('https://www.badmintontw.com/taipei.php')
         # -------------------------------------------------------------------------------
         Team = self.get_team(html)
         Country = self.get_country(html)
@@ -121,7 +121,7 @@ class badmintontw:
 
     def choose_team(self, tb):
         
-        html = self.get_tree('https://www.badmintontw.com/taipei.php')
+        html = self.get_html('https://www.badmintontw.com/taipei.php')
         # -------------------------------------------------------------------------------
         team = self.get_team(html)
         # -------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ class badmintontw:
 
     def get_team_detail(self, link, team, select):
 
-        html = self.get_tree(link)
+        html = self.get_html(link)
         # -------------------------------------------------------------------------------
         need_ppl = self.get_need_ppl(html)
         detail_location = self.get_detail_location(html)
