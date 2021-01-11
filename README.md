@@ -7,6 +7,7 @@
 ### 清除emoji  
 ```
 import emoji
+import re
 text = emoji.demojize(sen1)  
 text = re.sub(':\S+?:', ' ', text)
 ```
