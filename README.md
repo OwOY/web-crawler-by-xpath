@@ -8,8 +8,8 @@
 ```
 import emoji
 import re
-text = emoji.demojize(sen1)  
-text = re.sub(':\S+?:', ' ', text)
+text = emoji.demojize(text)  
+text_demojize = re.sub(':\S+?:', ' ', text)
 ```
 ### 如果String長['test']  
 - 可以使用eval(string)轉換成List  
