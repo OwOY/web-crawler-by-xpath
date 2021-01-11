@@ -12,7 +12,7 @@ from lxml import etree
 
 mongoclient = pymongo.MongoClient('192.168.1.141')
 collection = mongoclient['lulupig_cn']['大神探花']
-wp = Client('https://taflower.cn/xmlrpc.php','taflowerA','ib43CfrHPU6Fzn')
+wp = Client(url,account,password)
 post = WordPressPost()
 
 _contents = ''
@@ -69,31 +69,3 @@ class mouzhan:
         #     f.write(img)        
         return img
 
-
-# for data in collection.find()[:2]:
-#     i = 0
-
-#     while i < len(data['content']):
-#         if 'http' in data['content'][i]:
-#             _contents += '<figure class="wp-block-image size-large"><img src= "'+ data['content'][i]+'" alt=""/></figure>'
-#         else:
-#             _contents += data['content'][i]
-#         i+=1
-
-
-# data = {'name':'test.jpg', 'type':'image/jpeg'}
-# img = mouzhan('https://mouzhan.org/article/120531315.html').download_cover()
-# data['bits'] = xmlrpc_client.Binary(img)
-
-# # with codecs.open('E:/1.jpg','rb')as f:
-# #     data['bits'] = xmlrpc_client.Binary(f.read())
-
-# response = wp.call(media.UploadFile(data))
-# post.thumbnail = response['id']
-# post.post_status = "publish"
-# title = mouzhan('https://mouzhan.org/article/120531315.html').get_title()
-# print(title[0])
-# post.title = str(title[0])
-# post.content = mouzhan('https://mouzhan.org/article/120531315.html').get_contents()
-# post.terms_names = {'category': ['探花',]}
-# wp.call(NewPost(post))
