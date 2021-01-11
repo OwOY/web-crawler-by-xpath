@@ -6,6 +6,7 @@
 ## 常用指令  
 ### 清除emoji  
 ```
+import emoji
 text = emoji.demojize(sen1)  
 text = re.sub(':\S+?:', ' ', text)
 ```
