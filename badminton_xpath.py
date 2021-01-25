@@ -4,10 +4,20 @@ import prettytable as pt
 import os
 
 
-
 class badmintontw:
 
-    tb = pt.PrettyTable(['ID','Team','Country','Time','Location','Lv','Fee','Court','Ball'])
+
+    def __init__(self, date):
+        self.tb = pt.PrettyTable(['ID','Team','Country','Time','Location','Lv','Fee','Court','Ball'])
+        self.requests = requests.Session()
+        self.date = date
+        self.main()
+
+
+    def main(self):
+        tb = self.get_team_info()
+        self.choose_team(tb)
+
 
     def get_html(self, url):
 
@@ -28,14 +38,6 @@ class badmintontw:
         html = etree.HTML(resp)
         return html
 
-    def __init__(self, date):
-        self.requests = requests.Session()
-        self.date = date
-        self.main()
-
-    def main(self):
-        tb = self.get_team_info()
-        self.choose_team(tb)
 
     def get_team(self, html):
 
@@ -44,12 +46,14 @@ class badmintontw:
         Team =  [T[0] if T != [] else '??' for T in Team]
         return Team
 
+
     def get_country(self, html):
 
         Country = html.xpath('//td[2]')
         Country = [C.xpath('.//text()') for C in Country]
         Country = [C[0] if C != [] else '??' for C in Country]
         return Country
+
 
     def get_time(self, html):
 
@@ -58,12 +62,14 @@ class badmintontw:
         Time = [T[0] if T != [] else '??' for T in Time]
         return Time
 
+
     def get_location(self, html):
 
         Location = html.xpath('//td[4]')
         Location = [L.xpath('.//text()') for L in Location]
         Location = [L[0] if L != [] else '??' for L in Location]
         return Location
+
 
     def get_lv(self, html):
 
@@ -72,12 +78,14 @@ class badmintontw:
         Lv = [L[0] if L != [] else '??' for L in Lv]
         return Lv
 
+
     def get_fee(self, html):
 
         Fee = html.xpath('//td[6]')
         Fee = [F.xpath('.//text()') for F in Fee]
         Fee = [F[0] if F != [] else '??' for F in Fee]
         return Fee
+
 
     def get_court(self, html):
 
@@ -86,6 +94,7 @@ class badmintontw:
         Court = [C[0] if C != [] else '??' for C in Court]
         return Court
 
+
     def get_ball(self, html):
         
         Ball = html.xpath('//td[8]')
@@ -93,11 +102,13 @@ class badmintontw:
         Ball = [B[0] if B != [] else '??' for B in Ball]
         return Ball
 
+
     def get_team_detail_link(self, html):
 
         Get_Link = html.xpath('//td[4]')
         Get_Link = ['https://www.badmintontw.com/'+GL.xpath('.//@href')[0] for GL in Get_Link]
         return Get_Link
+
 
     def get_team_info(self):
 
@@ -143,12 +154,14 @@ class badmintontw:
         need_ppl = ''.join(need_ppl)
         return need_ppl
     
+
     def get_detail_location(self, html):
 
         detail_location = html.xpath('//ul[@class="no-padding-left"]//li[5]//text()')
         detail_location = [DL.strip().strip('()').replace('地圖','') for DL in detail_location]
         detail_location = ''.join(detail_location)
         return detail_location
+
 
     def get_tel(self, html):
 
@@ -157,6 +170,7 @@ class badmintontw:
         tel = ''.join(tel)
         return tel
 
+
     def get_contact_name(self, html):
 
         contact_name = html.xpath('//li[label[@for="contact_person1"]]//text()')
@@ -164,12 +178,14 @@ class badmintontw:
         contact_name = ''.join(contact_name)
         return contact_name
 
+
     def get_contact_line(self, html):
 
         line = html.xpath('//li[label[contains(text(),"Line")]]//text()')
         line = [T.replace('傳Line訊息','').strip('()') for T in line]
         line = ''.join(line)
         return line
+
 
     def get_team_detail(self, link, team, select):
 
@@ -184,6 +200,8 @@ class badmintontw:
         print(team[select-1], need_ppl, detail_location, contact_name, tel, line)
         # -------------------------------------------------------------------------------
         os.system('read -n 1 -p "Press any key to continue..."')
+
+
 if __name__ == '__main__':
     date = input('請輸入今天日期(請按照格式:月/日) : ')
     badmintontw(date)
