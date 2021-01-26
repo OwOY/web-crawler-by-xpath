@@ -13,10 +13,12 @@ class udn_news:
         self.requests = requests.Session()
         self.main()
     
+
     def main(self):
         
         self.get_news()
         
+
     def get_html(self, page):
                 
         h = {
@@ -45,6 +47,7 @@ class udn_news:
         
         return resp
     
+
     def get_news(self):   
          
         for page in range(1,50):
@@ -57,6 +60,7 @@ class udn_news:
                 tb.add_row([b['title'], b['time']['date'], 'https://udn.com'+b['titleLink']])
             print(tb)
             time.sleep(rest)
+            
             
 if __name__ == '__main__':
     udn_news()
