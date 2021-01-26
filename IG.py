@@ -6,12 +6,12 @@ import codecs
 
 class IG_image:
     
-
     def __init__(self, account):
 
         self.requests = requests.Session()
         self.account = account
         self.main()
+
 
     def main(self):
 
@@ -20,6 +20,7 @@ class IG_image:
         while True:
             resp_json = self.get_json(account_id, after)
             after = self.get_images_urls(resp_json)
+
 
     def get_account_id(self):
         
@@ -40,6 +41,7 @@ class IG_image:
         html = etree.HTML(resp)
         get_account_id = html.xpath('//button[@class="load-more"]/@data-id')
         return get_account_id[0]
+
 
     def get_json(self, account_id, after):
 
@@ -73,6 +75,7 @@ class IG_image:
         end_cursor = resp_json['data']['user']['edge_owner_to_timeline_media']['page_info']['end_cursor']
         return end_cursor
 
+
     def download_image(self, image_url):
         
         resp = self.requests.get(image_url, headers = {
@@ -95,7 +98,6 @@ class IG_image:
             f.write(resp)
             print(f'{number}.jpg  download OK')
     
-
 
 if __name__ == '__main__':
     

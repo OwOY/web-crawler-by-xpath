@@ -32,7 +32,6 @@ def get_html(url, month):
     return html
 
 
-
 def get_movie_info():
     
     month = datetime.datetime.now().month
@@ -41,7 +40,6 @@ def get_movie_info():
     Total_Movie_Name = []
     Total_Release = []
     Total_expect = []
-
 
 
     print(f'{year}年電影上映資訊')

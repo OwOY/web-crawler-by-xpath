@@ -13,6 +13,7 @@ class google_img_download:
         self.requests = requests.Session()
         self.main()
         
+
     def main(self):
         
         num = 20
@@ -36,6 +37,7 @@ class google_img_download:
             num += 20
             time.sleep(rest)
             
+
     def get_html(self, want_img, num):
         h = {
                 'Host': 'www.google.com.tw',
@@ -63,12 +65,14 @@ class google_img_download:
         html = etree.HTML(resp)
         return html
     
+
     def download_img(self, want_img, img_url, i):
         
         img = self.requests.get(img_url)
         with codecs.open(f'GoogleDownload/{want_img}{str(i)}.jpg','wb')as f:
             f.write(img.content)
             print(f'{want_img}{i} Done')
+    
     
 if __name__ == '__main__':
     
