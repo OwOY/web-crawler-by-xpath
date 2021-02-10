@@ -22,13 +22,12 @@ class Tourist4p:
     def get_tree(self, url):
 
         response = self.requests.get(url,headers = {
-            'Host': 'www.4p.com.tw',
+            'Host': 'www.newamazing.com.tw',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3',
             'Accept-Encoding': 'gzip, deflate',
-            'Origin': 'https://www.4p.com.tw',
-            'Referer': 'https://www.4p.com.tw/EW/GO/GroupList.asp'
+            'Referer': 'https://www.newamazing.com.tw/EW/GO/GroupList.asp?displayType=G&subCd=&orderCd=1&pageALL=1&pageGO=2&pageGI=&pagePGO=1&waitData=false&waitPage=false&mGrupCd=&SrcCls=D&tabList=GO&regmCd=&regsCd=&beginDt=2021%2F02%2F10&endDt=2022%2F02%2F10&portCd=&tdays=&bjt=&carr=&allowJoin=1&allowWait=1&ikeyword='
         }).text
         html = etree.HTML(response)
         return html
@@ -36,14 +35,13 @@ class Tourist4p:
 
     def get_json(self, begin_date, end_date, page):
 
-        response = self.requests.post('https://www.4p.com.tw/EW/Services/SearchListData.asp',headers = {
-            'Host': 'www.4p.com.tw',
+        response = self.requests.post('https://www.newamazing.com.tw/EW/Services/SearchListData.asp',headers = {
+            'Host': 'www.newamazing.com.tw',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
             'Accept': '*/*',
             'Accept-Language': 'zh-TW,zh;q=0.8,en-US;q=0.5,en;q=0.3',
             'Accept-Encoding': 'gzip, deflate',
-            'Origin': 'https://www.4p.com.tw',
-            'Referer': 'https://www.4p.com.tw/EW/GO/GroupList.asp'
+            'Referer': 'https://www.newamazing.com.tw/EW/GO/GroupList.asp?tabList=GO'
         },data = {
             'pageALL':page,
             'beginDt':begin_date,
@@ -68,7 +66,7 @@ class Tourist4p:
             port_name = data['PortNm']
             order_deadline = data['OrderDl']
             price = data['SaleAm']
-            url_list.append('https://www.4p.com.tw' + data['Url'])
+            url_list.append('https://www.newamazing.com.tw' + data['Url'])
             tb.add_row([ID, f'[{trip_ID}]{tour_name}', leave_datetime, tour_date, port_name, price, totalseat, leftseat, order_deadline])
             ID += 1        
 
