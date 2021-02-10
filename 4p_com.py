@@ -3,7 +3,7 @@ from lxml import etree
 import prettytable as pt
 import os
 
-class Tourist4p:
+class New_amazing:
 
     def __init__(self):
 
@@ -117,4 +117,4 @@ class Tourist4p:
 if __name__ == '__main__':
     
     # Tourist4p().get_info('https://www.4p.com.tw/EW/GO/GroupDetail.asp?prodCd=TWNBR210223C')
-    Tourist4p()
+    New_amazing()
