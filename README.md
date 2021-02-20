@@ -2,7 +2,12 @@
 運用xpath解析Requests  
 關於xpath的詳細用法:https://devhints.io/xpath  
 連結所有子節點的text()   descendant::text()  
-
+- 若有SSL憑證問題
+在Code中加入
+```
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+```
 ## 常用指令  
 ### 清除emoji  
 ```
