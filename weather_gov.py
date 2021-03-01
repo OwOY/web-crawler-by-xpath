@@ -8,9 +8,12 @@ class Weather:
     def __init__(self, ):
         
         self.requests = requests.Session()
+        self.main()
         
         
-    # def main(self):
+    def main(self):
+
+        self.get_location_ID()
 
 
     def get_tree(self, url):
@@ -26,6 +29,7 @@ class Weather:
         html = etree.HTML(response)
         return html
 
+
     def get_location_ID(self):
         
         tb = pt.PrettyTable(['ID','CID','location'])
@@ -40,6 +44,7 @@ class Weather:
             i += 1
         print(tb)
         self.user_choose_location(CID_list)
+
 
     def user_choose_location(self, CID_list):
         
@@ -81,4 +86,4 @@ class Weather:
 
 if __name__ == '__main__':
     
-    Weather().get_location_ID()
+    Weather()
