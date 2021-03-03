@@ -73,6 +73,7 @@ class New_amazing:
             ID += 1        
 
         while True:
+            os.system('clear')
             print(tb)
             user_choose = int(input('請選擇動作(0)離開(1)查看資訊(2)上一頁(3)下一頁 : '))
             if user_choose == 0:
