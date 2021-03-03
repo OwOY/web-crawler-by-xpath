@@ -68,8 +68,10 @@ class Invoice:
         print(f'''
 {invoice_month[0]}\n特別獎:{invoice_num[0]}\n特獎:{invoice_num[1]}\n\
 頭獎 :{invoice_num[2]}\n增加6獎 :{invoice_num[3]}\n
+---------------------------------------------------------------------------
                  ''')
         return invoice_num
+
 
     def check_winning(self, your_invoice_num, invoice_num):
         
