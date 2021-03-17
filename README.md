@@ -33,17 +33,18 @@ re.split('。|！|？','',text)
 ```
 
 ### 多進程的運用  
-``` from multiprocessing import Process  
-    def run5_post(x):  
+``` 
+from multiprocessing import Process  
+def run5_post(x):  
     run(x)
-    if __name__ == '__main__':      
-        t1 = Process(target=run5_post, args=(1,))  
-        t2 = Process(target=run5_post, args=(2,))  
-        t1.start()  
-        t2.start()  
+if __name__ == '__main__':      
+    t1 = Process(target=run5_post, args=(1,))  
+    t2 = Process(target=run5_post, args=(2,))  
+    t1.start()  
+    t2.start()  
 ```
 ### not contains example  
-- //div[@class='entry-content'][not(contains(div/@class, 'yarpp-related'))]
+- //div[@class='entry-content']/div[not(contains(@class, 'yarpp-related'))]
 
 ### retrying 
 - python -m pip install retrying
