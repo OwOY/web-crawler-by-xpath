@@ -1,3 +1,9 @@
+<div align=center><img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Requests_Python_Logo.png" height=500px; width=500px;></div>  
+ 
+--------------------------------------------------
+
+<div align=left></div>  
+
 # web-crawler-by-xpath
 運用xpath解析Requests  
 關於xpath的詳細用法:https://devhints.io/xpath  
@@ -77,3 +83,4 @@ https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
 https://www.zhihu.com/column/webspider  
 https://dotblogs.com.tw/supershowwei/2018/09/03/145254  
 https://zhuanlan.zhihu.com/p/32187820  
+
