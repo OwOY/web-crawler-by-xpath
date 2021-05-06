@@ -77,7 +77,13 @@ https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
 ### 爬蟲若出現connection reset by peer  
 - python -m pip install pyopenssl ndg-httpsclient pyasn1
   
-
+### 相似詞比對工具  
+- 若有兩篇相似之文章需要比對  
+```
+import difflib
+seq = difflib.SequenceMatcher(None, default_msg, new_msg)
+ratio = seq.ratio()
+```
   
 # 改天研究  
 https://www.zhihu.com/column/webspider  
