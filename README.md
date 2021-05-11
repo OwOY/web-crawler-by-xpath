@@ -15,6 +15,11 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 ```
 ## 常用指令  
+### 確認網頁編碼  
+```
+print(response.encoding)  
+print(response.apparent_encoding)  
+```
 ### 清除emoji  
 ```
 import emoji
