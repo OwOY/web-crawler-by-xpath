@@ -15,6 +15,11 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 ```
 ## 常用指令  
+### 若要引用上層模塊
+```
+import sys
+sys.path.append('..')
+```
 ### 確認網頁編碼  
 ```
 print(response.encoding)  
