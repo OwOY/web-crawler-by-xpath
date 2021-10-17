@@ -32,6 +32,12 @@ import re
 text = emoji.demojize(text)  
 text_demojize = re.sub(':\S+?:', ' ', text)
 ```
+### 取得tag ID
+```
+test = <Element Strong at 0x000000>
+print(test.tag) # Strong
+```
+
 ### 如果String長['test']  
 - 可以使用eval(string)轉換成List  
 
