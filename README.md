@@ -32,6 +32,11 @@ import re
 text = emoji.demojize(text)  
 text_demojize = re.sub(':\S+?:', ' ', text)
 ```
+### 清除 u3000...eq 等問題
+```
+import re
+content = re.sub('\s', ' ', content)
+```
 ### 取得tag ID
 ```
 test = <Element Strong at 0x000000>
