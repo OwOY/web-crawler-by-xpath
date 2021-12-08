@@ -31,6 +31,7 @@ a = ['2','5']
 if isinstance(data,list):
     return True
 >> True
+```
 ### 清除emoji  
 ```
 import emoji
