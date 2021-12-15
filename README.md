@@ -51,8 +51,11 @@ print(test.tag) # Strong
 ```
 
 ### 如果String長['test']  
-- 可以使用eval(string)轉換成List  
-
+```
+test = ['test']
+type(test)  # str
+type(eval(test))  #list
+```
 ### 轉字體(繁轉簡)
 ``` 
  from opencc import OpenCC  
