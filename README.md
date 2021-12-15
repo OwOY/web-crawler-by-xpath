@@ -104,7 +104,14 @@ https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
 
 ### 爬蟲若出現connection reset by peer  
 - python -m pip install pyopenssl ndg-httpsclient pyasn1
-  
+
+### 爬蟲若出現HTTP(S)ConnectionPool:Max retries exceed with url
+1. 隨手關閉session池
+```
+import requests
+requestss = requests.Session()
+requestss.keep_alive = False
+```
 ### 相似詞比對工具  
 - 若有兩篇相似之文章需要比對  
 ```
