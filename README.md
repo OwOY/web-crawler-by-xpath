@@ -14,24 +14,13 @@
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 ```
-## 常用指令  
-### 若要引用上層模塊
-```
-import sys
-sys.path.append('..')
-```
+
 ### 確認網頁編碼  
 ```
 print(response.encoding)  
 print(response.apparent_encoding)  
 ```
-### 確認格式型態
-```
-a = ['2','5']
-if isinstance(data,list):
-    return True
->> True
-```
+
 ### 清除emoji  
 ```
 import emoji
@@ -50,12 +39,6 @@ test = <Element Strong at 0x000000>
 print(test.tag) # Strong
 ```
 
-### 如果String長['test']  
-```
-test = ['test']
-type(test)  # str
-type(eval(test))  #list
-```
 ### 轉字體(繁轉簡)
 ``` 
  from opencc import OpenCC  
@@ -69,17 +52,7 @@ import re
 re.split('。|！|？','',text) 
 ```
 
-### 多進程的運用  
-``` 
-from multiprocessing import Process  
-def run5_post(x):  
-    run(x)
-if __name__ == '__main__':      
-    t1 = Process(target=run5_post, args=(1,))  
-    t2 = Process(target=run5_post, args=(2,))  
-    t1.start()  
-    t2.start()  
-```
+
 ### not contains example  
 - //div[@class='entry-content']/div[not(contains(@class, 'yarpp-related'))]
 
