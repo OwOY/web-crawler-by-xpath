@@ -83,7 +83,7 @@ class Pinkoi:
         df.to_csv(self.csv_name, mode='a', index=False, header=False)
         
     def download_pic(self, title, camera_id):
-        pic_id = 1
+        pic_id = 0
         file_dir = f'img/{title}'
         if not os.path.isdir(file_dir):
             os.makedirs(file_dir)
