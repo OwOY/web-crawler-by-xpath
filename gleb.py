@@ -91,12 +91,24 @@ class GlenCrawl:
         Args:
             album_link (str): 相簿連結
         """
+        page = 1
+        last_page = 1
+        total_pic_link_list = []
         response = self.requests.get(album_link)
         tree = etree.HTML(response.text)
-        pic_link_list = tree.xpath('//td[@class="thumbnails"]//@src')
-        pic_link_list = [f'https://glen-powell.org/photos/{pic_link.replace("thumb_", "")}'
-                         for pic_link in pic_link_list]
-        return pic_link_list
+        other_page = tree.xpath('//td[@class="navmenu"]//text()')
+        if other_page:
+            last_page = other_page[-1]
+        while page <= int(last_page):
+            response = self.requests.get(album_link,
+                                         params={'page':page})
+            tree = etree.HTML(response.text)
+            pic_link_list = tree.xpath('//td[@class="thumbnails"]//@src')
+            pic_link_list = [f'https://glen-powell.org/photos/{pic_link.replace("thumb_", "")}'
+                            for pic_link in pic_link_list]
+            total_pic_link_list += pic_link_list
+            page += 1
+        return total_pic_link_list
         
     def download_img(self, download_dir, pic_link_list):
         """下載圖片
@@ -117,20 +129,34 @@ class GlenCrawl:
         """
         category_list, category_link_list = self.get_category()
         for category, category_link in zip(category_list, category_link_list):
-            year_list, year_link_list = self.get_year_page(category_link)
-            
-            for year, year_link in zip(year_list, year_link_list):
-                album_title_list, album_link_list = self.get_album_link(year_link)
+            if category != 'Miscellaneous':
+                year_list, year_link_list = self.get_year_page(category_link)
+                
+                for year, year_link in zip(year_list, year_link_list):
+                    album_title_list, album_link_list = self.get_album_link(year_link)
+                    
+                    for album_title, album_link in zip(album_title_list, album_link_list):
+                        album_title = re.sub(r'[\/]', '', album_title)
+                        download_dir = f'download/{category}/{year}/{album_title}'
+                        download_dir = re.sub(r'[:*?"><|]', '', download_dir)
+                        if not os.path.isdir(download_dir):
+                            os.makedirs(download_dir)
+                        pic_link_list = self.get_pic_link_list(album_link)
+                        self.download_img(download_dir, pic_link_list)
+                        print(f'{album_title} 下載完成')
+            else:
+                album_title_list, album_link_list = self.get_album_link(category_link)
                 
                 for album_title, album_link in zip(album_title_list, album_link_list):
                     album_title = re.sub(r'[\/]', '', album_title)
-                    download_dir = f'download/{category}/{year}/{album_title}'
+                    download_dir = f'download/{category}/{album_title}'
                     download_dir = re.sub(r'[:*?"><|]', '', download_dir)
                     if not os.path.isdir(download_dir):
                         os.makedirs(download_dir)
                     pic_link_list = self.get_pic_link_list(album_link)
                     self.download_img(download_dir, pic_link_list)
                     print(f'{album_title} 下載完成')
+                
             
 if __name__ == '__main__':
     glen = GlenCrawl()
@@ -138,4 +164,4 @@ if __name__ == '__main__':
     # print(glen.get_category())
     # print(glen.get_year_page('https://glen-powell.org/photos/index.php?cat=2'))
     # print(glen.get_album_link('https://glen-powell.org/photos/index.php?cat=66'))
-    # print(glen.get_pic_link_list('https://glen-powell.org/photos/thumbnails.php?album=258'))
+    # print(glen.get_pic_link_list('https://glen-powell.org/photos/thumbnails.php?album=304'))
