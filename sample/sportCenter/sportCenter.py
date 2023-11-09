@@ -125,12 +125,31 @@ class SportCenter:
             )
             sleep(0.1)
     
+    def line_notify(self, line_token, msg):
+        payload = {'message':msg}
+        requests.post(
+            'https://notify-api.line.me/api/notify',
+            data=payload,
+            headers={'Authorization':f'Bearer {line_token}'}
+        )
+    
+    def read_config(self):
+        config_dict = {}
+        with codecs.open('password.ini', 'r') as f:
+            config_list = f.readlines()
+        for data in config_list:
+            key, value = data.split('=')
+            config_dict[key] = value.strip()
+        return config_dict
+    
     def main(self):
         """調整規律，因只開放搶下禮拜當日場地，固只搶下周四、五的場地
         """
         self.get_captcha()
-        client_id = input('請輸入身分證字號:')
-        password = input('請輸入密碼:')
+        config_dict = self.read_config()
+        client_id = config_dict.get('CLINET')
+        password = config_dict.get('PASSWORD')
+        line_token = config_dict.get('LINETOKEN')
         captcha = input('請輸入驗證碼:')
         self.get_login(client_id, password, captcha)
         
@@ -163,12 +182,11 @@ class SportCenter:
             if len(order_court_dict) == 2:
                 print(f'已搶到場地{str_dt}')
                 self.order_court(str_dt, order_court_dict)
+                self.line_notify(line_token, f'{str_dt}已搶到場地')
                 break
             sleep(sleep_time)
-            
+    
             
 if __name__ == '__main__':
     sc = SportCenter()
     sc.main()
-    # sc.get_captcha()
-    # sc.order_court(87, 21)
