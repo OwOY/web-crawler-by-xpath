@@ -29,29 +29,6 @@ class SportCenter:
             sessionId = response.cookies.get('ASP.NET_SessionId')
         return sessionId
     
-    def get_html_response(self, date:str):
-        """取得球場狀態的html tree
-
-        Args:\n
-            date (str): 日期 ex:YYYY/MM/DD
-        """
-        response = self.requests.get(
-            'https://scr.cyc.org.tw/tp09.aspx',
-            params = {
-                'module': 'net_booking',
-                'files': 'booking_place',
-                'StepFlag': '2',
-                'PT': '1',
-                'D': date,
-                'D2': '3'
-            }
-        )
-        return response
-    
-    def get_tree(self, response):
-        tree = etree.HTML(response.text)
-        return tree
-
     def get_login(self, client_id, password, captcha):
         self.requests.post(
             'https://scr.cyc.org.tw/tp09.aspx',
@@ -73,65 +50,28 @@ class SportCenter:
         with codecs.open('captcha.jpg', 'wb') as f:
             f.write(response.content)
     
-    def get_court_status(self, tree):
-        """取得球場狀態
-
-        Args:\n
-            tree (etree): html tree
-        """
-        order_court_dict = {}
-        table_list = tree.xpath('//span[@id="ContentPlaceHolder1_Step2_data"]//tr')
-        idx = 0
-        for table in table_list[1:]:
-            if idx%6 == 0:
-                time = table.xpath('./td[1]/text()')
-                court = table.xpath('./td[2]/text()')
-                prize = table.xpath('./td[3]/text()')
-                status = table.xpath('./td[4]/img/@onclick')
-            else:
-                court = table.xpath('./td[1]/text()')
-                prize = table.xpath('./td[2]/text()')
-                status = table.xpath('./td[3]/img/@onclick')
-            idx += 1
-            print(time[0], court[0], prize[0])
-            if ('您是否確定預約' in status[0] and
-                (time[0] == '18:00~19:00' or time[0] == '19:00~20:00')
-            ):
-                order_loc = status[0].split('Step3Action(')[1].split(',')
-                if time[0] not in order_court_dict:
-                    order_court_dict[time[0]] = order_loc
-                print(time[0], court[0], prize[0], order_loc)
-        return order_court_dict
-    
-    def order_court(self, str_dt, order_court_dict):
+    def order_court(self, str_dt):
         """訂球場
-        Args:
-            order_court_dict (dict): key為日期，value為球場座標
+        Args: 
+            str_dt(str):
         """
-        for _, court in order_court_dict.items():
-            x = court[0]
-            y = court[1].split(')')[0]
-            self.requests.get(
-                'https://scr.cyc.org.tw/tp09.aspx',
-                params={
-                    'module': 'net_booking',
-                    'files': 'booking_place',
-                    'StepFlag': '25',
-                    'QPid': x,
-                    'QTime': y,
-                    'PT': '1',
-                    'D': str_dt
-                }
-            )
-            sleep(0.1)
-    
-    def line_notify(self, line_token, msg):
-        payload = {'message':msg}
-        requests.post(
-            'https://notify-api.line.me/api/notify',
-            data=payload,
-            headers={'Authorization':f'Bearer {line_token}'}
-        )
+        court_list = ['83', '84', '1074', '1075', '87', '88']
+        time_list = ['18', '19']
+        for _time in time_list:
+            for _court in court_list:
+                self.requests.get(
+                    'https://scr.cyc.org.tw/tp09.aspx',
+                    params={
+                        'module': 'net_booking',
+                        'files': 'booking_place',
+                        'StepFlag': '25',
+                        'QPid': _court,
+                        'QTime': _time,
+                        'PT': '1',
+                        'D': str_dt
+                    }
+                )
+                sleep(0.1)
     
     def read_config(self):
         config_dict = {}
@@ -149,9 +89,9 @@ class SportCenter:
         config_dict = self.read_config()
         client_id = config_dict.get('CLINET')
         password = config_dict.get('PASSWORD')
-        line_token = config_dict.get('LINETOKEN')
         captcha = input('請輸入驗證碼:')
         self.get_login(client_id, password, captcha)
+        sleep_time = 60
         
         while True:
             now_date = datetime.now()
@@ -160,32 +100,25 @@ class SportCenter:
             now_minute = now_date.minute
             # 週三23:50~週四01:00
             # 週四23:50~週五01:00
-            if (now_weekday != 3 
-                and now_weekday != 4
+            if (
+                (now_weekday == 2 and now_hour == 23 and now_minute > 59) or 
+                (now_weekday == 3 and now_hour == 23 and now_minute > 59) or 
+                ((now_weekday == 3 or now_weekday == 4) and now_hour < 1 and now_minute < 2)
             ):
+                print('準備開搶...')
+                sleep_time = uniform(0.1, 0.5)
+                
+                if now_minute == 0:
+                    next_week_dt = now_date + timedelta(days=7)
+                    next_week_str_dt = next_week_dt.strftime('%Y/%m/%d')
+                    self.order_court(next_week_str_dt)
+                    print('已搶完下周場地')
+                    break
+            else:
                 print(f'未到搶場地時間，等待中...{now_date}')
                 sleep(60*60)
                 continue
-            sleep_time = 60
-            if (
-                (now_weekday == 2 and now_hour == 23 and now_minute > 59) or 
-                ((now_weekday == 3 or now_weekday == 4) and now_hour < 1 )
-            ):
-                sleep_time = uniform(0.5, 1.3)
-            
-            next_week_date = now_date + timedelta(days=7)
-            str_dt = next_week_date.strftime('%Y/%m/%d')
-            print('查看日期:', str_dt)
-            response = self.get_html_response(str_dt)
-            tree = self.get_tree(response)
-            order_court_dict = self.get_court_status(tree)
-            if len(order_court_dict) == 2:
-                print(f'已搶到場地{str_dt}')
-                self.order_court(str_dt, order_court_dict)
-                self.line_notify(line_token, f'{str_dt}已搶到場地')
-                break
             sleep(sleep_time)
-    
             
 if __name__ == '__main__':
     sc = SportCenter()
